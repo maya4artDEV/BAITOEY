@@ -7,7 +7,7 @@
 <style>
 :root{
   --green:#637D36;--green-light:#7d9846;--green-pale:#eef2e6;
-  --amber:#C8962A;--cream:#F7F4EE;
+  --amber:#C8962A;--amber-pale:#fdf3e0;--cream:#F7F4EE;
   --text:#1a1a1a;--text-muted:#6b6b6b;--text-hint:#9e9e9e;
   --border:rgba(0,0,0,.10);--border-strong:rgba(0,0,0,.18);
   --bg:#fff;--surface:#f9f7f3;--red:#c0392b;
@@ -17,9 +17,10 @@
 body{font-family:'Segoe UI','Noto Sans Thai',Arial,sans-serif;background:var(--cream);color:var(--text);min-height:100vh;padding-bottom:3rem;}
 .header-bar{background:var(--green);position:relative;padding:1rem 1rem .9rem;}
 .header-top{display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem;padding-right:80px;}
+.header-tabs-row{padding:6px 0 0;padding-right:80px;}
 .app-title{font-size:1.1rem;font-weight:700;color:#fff;letter-spacing:.02em;line-height:1.15;}
 .app-subtitle{font-size:.65rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.05em;margin-top:2px;}
-.header-tabs{display:flex;flex-shrink:0;border:.5px solid rgba(255,255,255,.3);border-radius:var(--radius-sm);overflow:hidden;}
+.header-tabs{display:flex;border:.5px solid rgba(255,255,255,.3);border-radius:var(--radius-sm);overflow:hidden;width:100%;}
 .header-tabs button{background:none;border:none;color:rgba(255,255,255,.85);font-size:12px;font-weight:600;padding:0 .9rem;min-height:var(--touch);cursor:pointer;font-family:inherit;white-space:nowrap;-webkit-appearance:none;}
 .header-tabs button+button{border-left:.5px solid rgba(255,255,255,.3);}
 .header-tabs button.active{background:rgba(255,255,255,.2);color:#fff;}
@@ -100,6 +101,25 @@ body{font-family:'Segoe UI','Noto Sans Thai',Arial,sans-serif;background:var(--c
 .total-value{font-size:1.1rem;font-weight:700;color:var(--green);margin-top:2px;}
 .use-btn{background:var(--green);color:#fff;border:none;border-radius:var(--radius-sm);padding:0 16px;font-size:13px;cursor:pointer;font-family:inherit;font-weight:600;min-height:var(--touch);white-space:nowrap;flex-shrink:0;-webkit-appearance:none;}
 .use-btn:active{opacity:.8;}
+.filter-bar{display:flex;gap:6px;margin-bottom:1rem;flex-wrap:wrap;align-items:center;}
+.filter-btn{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius-sm);padding:6px 14px;font-size:12px;cursor:pointer;font-family:inherit;color:var(--text-muted);min-height:var(--touch);-webkit-appearance:none;}
+.filter-btn.active{background:var(--green);color:#fff;border-color:var(--green);}
+.filter-select{font-size:12px;padding:6px 8px;border:.5px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);font-family:inherit;color:var(--text);min-height:var(--touch);}
+.stock-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:6px;}
+.stock-table th{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--text-hint);padding:5px 6px;border-bottom:1px solid var(--border-strong);white-space:nowrap;text-align:left;}
+.stock-table th.r{text-align:right;}
+.stock-table td{padding:5px 6px;border-bottom:.5px solid var(--border);vertical-align:middle;font-size:12px;}
+.stock-table td.r{text-align:right;white-space:nowrap;font-weight:600;}
+.cat-badge{display:inline-block;font-size:9px;font-weight:600;padding:2px 7px;border-radius:10px;}
+.cat-badge.ingredient{background:var(--green-pale);color:var(--green);}
+.cat-badge.supply{background:var(--amber-pale);color:var(--amber);}
+.pick-sel{font-size:10px;padding:3px 4px;border:.5px solid var(--border);border-radius:4px;background:var(--surface);font-family:inherit;color:var(--text-muted);max-width:60px;cursor:pointer;}
+.pick-sel:focus{border-color:var(--green-light);outline:none;}
+.sadd{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1.5fr 1fr auto;gap:6px;margin-top:12px;padding-top:12px;border-top:.5px solid var(--border-strong);align-items:center;}
+@media(max-width:600px){.sadd{grid-template-columns:1fr 1fr;}}
+.sadd input,.sadd select{font-size:12px;padding:6px 8px;border:.5px solid var(--border-strong);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);outline:none;font-family:inherit;width:100%;min-height:36px;}
+.sadd input:focus,.sadd select:focus{border-color:var(--green-light);}
+.sadd-btn{background:var(--green);color:#fff;border:none;border-radius:var(--radius-sm);padding:0 12px;font-size:12px;cursor:pointer;font-family:inherit;font-weight:600;min-height:36px;white-space:nowrap;width:100%;}
 .page{display:none;}.page.active{display:block;}
 footer{text-align:center;font-size:11px;color:var(--text-hint);margin-top:2rem;}
 </style>
@@ -110,11 +130,14 @@ footer{text-align:center;font-size:11px;color:var(--text-hint);margin-top:2rem;}
   <div class="header-top">
     <div>
       <div class="app-title">BAITOEY TEA</div>
-      <div class="app-subtitle">Price &amp; Break-even Calculator · v6</div>
+      <div class="app-subtitle">Price &amp; Break-even Calculator · v8</div>
     </div>
+  </div>
+  <div class="header-tabs-row">
     <div class="header-tabs">
       <button class="active" onclick="showPage('calc')">คำนวณราคา</button>
       <button onclick="showPage('menu')">ต้นทุนเมนู</button>
+      <button onclick="showPage('stock')">สต็อก</button>
     </div>
   </div>
   <div class="price-hero">
@@ -149,7 +172,7 @@ footer{text-align:center;font-size:11px;color:var(--text-hint);margin-top:2rem;}
     <div class="card">
       <p class="card-title">การชง</p>
       <div class="irow"><label>TÉYA/batch</label><input type="number" id="batchg" value="350" step="10" min="100" inputmode="numeric"><span class="unit">g</span></div>
-      <div class="irow"><label>น้ำ base/batch</label><input type="number" id="water" value="5250" step="50" min="1000" inputmode="numeric"><span class="unit">ml</span></div>
+      <div class="irow"><label>น้ำ base/batch <span style="font-size:9px;color:var(--amber)">(2 น้ำผสมรวม)</span></label><input type="number" id="water" value="8750" step="50" min="1000" inputmode="numeric"><span class="unit">ml</span></div>
       <div class="irow"><label>base/แก้ว</label><input type="number" id="perglass" value="220" step="10" min="50" inputmode="numeric"><span class="unit">ml</span></div>
       <div class="irow"><label>วัตถุดิบอื่น/แก้ว <span style="font-size:9px;color:var(--amber)">(จากหน้าเมนู)</span></label><input type="number" id="other" value="13.00" step="0.50" min="0" inputmode="decimal"><span class="unit">฿</span></div>
     </div>
@@ -238,7 +261,7 @@ var activateIdx = function(sel, idx) {
 };
 
 // ── PAGE NAV ─────────────────────────────────────────────
-var PAGES = ['calc', 'menu'];
+var PAGES = ['calc', 'menu', 'stock'];
 function showPage(id) {
   var idx = PAGES.indexOf(id);
   activateIdx('.page', idx);
@@ -404,6 +427,137 @@ function calc() {
   if (el) { el.addEventListener('input', calc); }
 });
 
+
+// ── STOCK ────────────────────────────────────────────────
+var STOCK = [
+  // วัตถุดิบ — โลตัส
+  {id:'s01',name:'น้ำส้มคั้น Smile',       cat:'ingredient',qty:1000,unit:'ml', price:124,   store:'โลตัส'},
+  {id:'s02',name:'เข้มเปรี้ยวโยเกิร์ต',    cat:'ingredient',qty:800, unit:'ml', price:33,    store:'โลตัส'},
+  {id:'s03',name:'นมสด Meiji',             cat:'ingredient',qty:830, unit:'ml', price:48.75, store:'โลตัส'},
+  {id:'s04',name:'สับปะรด',                cat:'ingredient',qty:900, unit:'g',  price:27,    store:'โลตัส'},
+  {id:'s05',name:'มะม่วงน้ำดอกไม้',        cat:'ingredient',qty:578, unit:'g',  price:34,    store:'โลตัส'},
+  {id:'s06',name:'น้ำเชื่อมอ้อย Rey',      cat:'ingredient',qty:450, unit:'ml', price:42,    store:'โลตัส'},
+  {id:'s07',name:'เสาวรสหวาน',             cat:'ingredient',qty:800, unit:'g',  price:69,    store:'โลตัส'},
+  {id:'s08',name:'เลมอน',                  cat:'ingredient',qty:550, unit:'g',  price:69,    store:'โลตัส'},
+  {id:'s09',name:'ส้มแมนดาริน',            cat:'ingredient',qty:150, unit:'g',  price:9.75,  store:'โลตัส'},
+  // วัตถุดิบ — เฮียบฮวด
+  {id:'s10',name:'น้ำเชื่อมมะม่วง Ting Fong',  cat:'ingredient',qty:760, unit:'ml',    price:76,  store:'เฮียบฮวด'},
+  {id:'s11',name:'น้ำเชื่อมเสาวรส Ting Fong',  cat:'ingredient',qty:760, unit:'ml',    price:76,  store:'เฮียบฮวด'},
+  {id:'s12',name:'ไซรัปมะนาวผึ้ง Long Beach',  cat:'ingredient',qty:740, unit:'ml',    price:125, store:'เฮียบฮวด'},
+  {id:'s13',name:'น้ำผึ้งเดือน 5',              cat:'ingredient',qty:1000,unit:'g',     price:89,  store:'เฮียบฮวด'},
+  {id:'s14',name:'บ๊วยดอง',                      cat:'ingredient',qty:1,   unit:'กระปุก',price:40,  store:'เฮียบฮวด'},
+  {id:'s15',name:'นมสด Carnation',               cat:'ingredient',qty:1000,unit:'ml',    price:67,  store:'เฮียบฮวด'},
+  {id:'s16',name:'กาแฟโบราณ มังกรบิน',          cat:'ingredient',qty:1000,unit:'g',     price:97,  store:'เฮียบฮวด'},
+  // ของใช้ — โลตัส
+  {id:'s17',name:'ช้อนน้ำหวานด้ามยาว',    cat:'supply',qty:2,  unit:'ด้าม', price:39,  store:'โลตัส'},
+  {id:'s18',name:'แก้วช็อต 1.5oz',        cat:'supply',qty:2,  unit:'แก้ว', price:58,  store:'โลตัส'},
+  // ของใช้ — เฮียบฮวด
+  {id:'s19',name:'ที่ตีฟองนม Oscar SB202a', cat:'supply',qty:1,unit:'ชิ้น',price:350, store:'เฮียบฮวด'},
+  {id:'s20',name:'ไม้ตีตะกร้อมินิ',         cat:'supply',qty:1,unit:'ชิ้น',price:40,  store:'เฮียบฮวด'},
+  // ของใช้ — Mr.DIY
+  {id:'s21',name:'ช้อนสแตนเลส 19cm',       cat:'supply',qty:3,  unit:'ชิ้น', price:25,  store:'Mr.DIY'},
+  {id:'s22',name:'T-filter ถุงชงชา 7×9cm', cat:'supply',qty:100,unit:'ชิ้น', price:45,  store:'Mr.DIY'},
+  {id:'s23',name:'ถ้วยตวง 250ml',           cat:'supply',qty:1,  unit:'ชิ้น', price:23,  store:'Mr.DIY'},
+  {id:'s24',name:'ที่ตักน้ำแข็ง Keeway 0.6L',cat:'supply',qty:1, unit:'ชิ้น', price:25,  store:'Mr.DIY'},
+  {id:'s25',name:'ถุงขยะ 45×55cm',          cat:'supply',qty:30, unit:'ชิ้น', price:17,  store:'Mr.DIY'}
+];
+
+// Single source: price per unit for a stock item
+var stockPPU = function(s) { return s.price / s.qty; };
+
+// Filter state — single source of truth for active filters
+var stockFilter = {cat: 'all', store: 'all'};
+
+function setStockFilter(key, val, btn) {
+  stockFilter[key] = val;
+  if (btn) {
+    // Update active class on category buttons only
+    document.querySelectorAll('.filter-btn').forEach(function(b) {
+      b.classList.remove('active');
+    });
+    btn.classList.add('active');
+  }
+  renderStockTable();
+}
+
+function renderStockTable() {
+  var tbody = $('stock-tbody');
+  if (!tbody) { return; }
+  var rows = STOCK.filter(function(s) {
+    var okCat   = stockFilter.cat   === 'all' || s.cat   === stockFilter.cat;
+    var okStore = stockFilter.store === 'all' || s.store === stockFilter.store;
+    return okCat && okStore;
+  });
+  if (rows.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--text-hint);padding:1rem">ไม่พบรายการ</td></tr>';
+    return;
+  }
+  tbody.innerHTML = rows.map(function(s) {
+    var ppu = stockPPU(s);
+    var badge = '<span class="cat-badge ' + s.cat + '">' + (s.cat === 'ingredient' ? 'วัตถุดิบ' : 'ของใช้') + '</span>';
+    return '<tr data-sid="' + s.id + '">' +
+      '<td>' + s.name + '</td>' +
+      '<td>' + badge + '</td>' +
+      '<td class="r">' + s.qty + '</td>' +
+      '<td>' + s.unit + '</td>' +
+      '<td class="r">' + fB(s.price) + '</td>' +
+      '<td style="color:var(--text-muted)">' + s.store + '</td>' +
+      '<td class="r" style="color:var(--green)">' + f2(ppu, ppu < 1 ? 4 : 2) + '฿/' + s.unit + '</td>' +
+      '<td><button class="del-btn">×</button></td>' +
+    '</tr>';
+  }).join('');
+  // single event listener via delegation — no inline onclick, no quoting issues
+  tbody.onclick = function(e) {
+    if (e.target.classList.contains('del-btn')) {
+      var sid = e.target.closest('tr').getAttribute('data-sid');
+      delStock(sid);
+    }
+  };
+}
+
+function addStockItem() {
+  var name  = $('sadd-name').value.trim();
+  var cat   = $('sadd-cat').value;
+  var qty   = parseFloat($('sadd-qty').value) || 0;
+  var unit  = $('sadd-unit').value;
+  var price = parseFloat($('sadd-price').value) || 0;
+  var store = $('sadd-store').value;
+  if (!name || qty <= 0 || price <= 0) { return; }
+  var id = 's' + Date.now();
+  STOCK.push({id:id, name:name, cat:cat, qty:qty, unit:unit, price:price, store:store});
+  $('sadd-name').value = '';
+  $('sadd-qty').value  = '';
+  $('sadd-price').value= '';
+  renderStockTable();
+}
+
+function delStock(id) {
+  STOCK = STOCK.filter(function(s) { return s.id !== id; });
+  renderStockTable();
+}
+
+// Pick from stock into a menu ingredient row
+function pickStock(sel, mi, j) {
+  var id = sel.value;
+  if (!id) { return; }
+  var s = STOCK.filter(function(s) { return s.id === id; })[0];
+  if (!s) { sel.value = ''; return; }
+  MENUS[mi].ings[j].name  = s.name;
+  MENUS[mi].ings[j].unit  = s.unit;
+  MENUS[mi].ings[j].price = stockPPU(s);
+  sel.value = '';
+  renderIngTable(mi);
+}
+
+// Build stock ingredient options string (shared between all pick-sels)
+function stockOpts() {
+  return '<option value="">📦</option>' +
+    STOCK.filter(function(s){ return s.cat === 'ingredient'; })
+    .map(function(s){
+      return '<option value="' + s.id + '">' + s.name + ' (' + f2(stockPPU(s),4) + '฿/' + s.unit + ')</option>';
+    }).join('');
+}
+
 // ── MENU COST ────────────────────────────────────────────
 var ING_UNITS = ['ml','g','ช้อนชา','ช้อนโต๊ะ','ใบ','ชิ้น','หน่วย'];
 var MENUS = [
@@ -445,6 +599,7 @@ function renderMenus() {
         '<table class="ing-table">' +
           '<thead><tr>' +
             '<th style="min-width:90px">วัตถุดิบ</th>' +
+            '<th style="min-width:60px">📦</th>' +
             '<th style="text-align:right;min-width:65px">ปริมาณ</th>' +
             '<th style="min-width:70px">หน่วย</th>' +
             '<th style="text-align:right;min-width:75px">฿/หน่วย</th>' +
@@ -477,6 +632,7 @@ function renderIngTable(mi) {
     return '<tr>' +
       '<td><input type="text" placeholder="นมสด" value="' + ing.name + '" ' +
         'oninput="MENUS[' + mi + '].ings[' + j + '].name=this.value"></td>' +
+      '<td><select class="pick-sel" onchange="pickStock(this,' + mi + ',' + j + ')">' + stockOpts() + '</select></td>' +
       '<td><input type="number" value="' + (ing.qty || '') + '" step="any" min="0" inputmode="decimal" ' +
         'oninput="MENUS[' + mi + '].ings[' + j + '].qty=parseFloat(this.value)||0; updateMenuTotal(' + mi + ')"></td>' +
       '<td><select onchange="MENUS[' + mi + '].ings[' + j + '].unit=this.value">' + opts + '</select></td>' +
@@ -515,7 +671,63 @@ function useMenuCost(mi) {
 
 // ── INIT ─────────────────────────────────────────────────
 renderMenus();
+renderStockTable();
 calc();
 </script>
+
+<div class="page" id="page-stock">
+<div class="container">
+  <p class="slabel">สต็อกวัตถุดิบ &amp; ของใช้</p>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="setStockFilter('cat','all',this)">ทั้งหมด</button>
+    <button class="filter-btn" onclick="setStockFilter('cat','ingredient',this)">วัตถุดิบ</button>
+    <button class="filter-btn" onclick="setStockFilter('cat','supply',this)">ของใช้</button>
+    <select class="filter-select" id="store-filter" onchange="setStockFilter('store',this.value,null)">
+      <option value="all">ทุกร้าน</option>
+      <option>โลตัส</option>
+      <option>เฮียบฮวด</option>
+      <option>Mr.DIY</option>
+    </select>
+  </div>
+
+  <div class="card" style="padding:.75rem;">
+    <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+      <table class="stock-table">
+        <thead><tr>
+          <th>ชื่อ</th>
+          <th>หมวด</th>
+          <th class="r">ปริมาณ</th>
+          <th>หน่วย</th>
+          <th class="r">ราคา</th>
+          <th>ร้าน</th>
+          <th class="r">฿/หน่วยย่อย</th>
+          <th></th>
+        </tr></thead>
+        <tbody id="stock-tbody"></tbody>
+      </table>
+    </div>
+
+    <div class="sadd">
+      <input type="text" id="sadd-name" placeholder="ชื่อ/ยี่ห้อ">
+      <select id="sadd-cat">
+        <option value="ingredient">วัตถุดิบ</option>
+        <option value="supply">ของใช้</option>
+      </select>
+      <input type="number" id="sadd-qty" placeholder="ปริมาณ" min="0" step="any" inputmode="decimal">
+      <select id="sadd-unit">
+        <option>ml</option><option>g</option><option>ชิ้น</option>
+        <option>กระปุก</option><option>ถุง</option><option>กล่อง</option><option>ม้วน</option>
+      </select>
+      <input type="number" id="sadd-price" placeholder="ราคา (฿)" min="0" step="any" inputmode="decimal">
+      <select id="sadd-store">
+        <option>โลตัส</option><option>เฮียบฮวด</option><option>Mr.DIY</option><option>อื่นๆ</option>
+      </select>
+      <button class="sadd-btn" onclick="addStockItem()">+ เพิ่ม</button>
+    </div>
+  </div>
+  <footer>BAITOEY TEA x TÉYA™ · อัปเดตอัตโนมัติ</footer>
+</div>
+</div>
 </body>
 </html>
